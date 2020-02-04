@@ -12,6 +12,8 @@
     top: 5px;
 }
 </style>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
+
 <script>
 
 // Need to focus on the engine. All demos will be one pixel, with controls,
@@ -72,6 +74,58 @@ You have 3 lives.
 
 
 <div id = "demo1" class="color-box" style="width: 100px; height: 100px" onclick="demo1()"></div>
+
+<br>
+<br>
+    <script>
+    var config = {
+        type: Phaser.AUTO,
+        width: 200,
+        height: 200,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 200 }
+            }
+        },
+        scene: {
+            preload: preload,
+            create: create
+        }
+    };
+
+    var game = new Phaser.Game(config);
+
+    function preload ()
+    {
+        this.load.setBaseURL('http://labs.phaser.io');
+
+        this.load.image('sky', 'assets/skies/space3.png');
+        this.load.image('logo', 'assets/sprites/phaser3-logo.png');
+        this.load.image('red', 'assets/particles/red.png');
+    }
+
+    function create ()
+    {
+        this.add.image(400, 300, 'red');
+
+        var particles = this.add.particles('red');
+
+        var emitter = particles.createEmitter({
+            speed: 100,
+            scale: { start: 1, end: 0 },
+            blendMode: 'ADD'
+        });
+
+        var logo = this.physics.add.image(400, 100, 'red');
+
+        logo.setVelocity(100, 200);
+        logo.setBounce(1, 1);
+        logo.setCollideWorldBounds(true);
+
+        emitter.startFollow(logo);
+    }
+    </script>
 
 </body>
 </html> 
