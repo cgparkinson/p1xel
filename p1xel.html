@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+.color-box {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-color: darkgray;
+    position: relative;
+    left: 5px;
+    top: 5px;
+}
+</style>
+<script>
+
+// Need to focus on the engine. All demos will be one pixel, with controls,
+// with delays, with colors. Solve these problems first. (Colors solved already.)
+
+function changeSquareColor(demo, color) {
+  console.log("changing " + demo + " to color " + color)
+  document.getElementById(demo).style.backgroundColor = color;
+}
+
+async function waitToComplete(time_ms, callback) {
+
+  let promise = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("done!"), time_ms)
+  });
+
+  let result = await promise; // wait until the promise resolves (*)
+
+  callback(); // "done!"
+}
+
+function demo1() {
+  changeSquareColor("demo1", "lightgray");
+  var lives = 3;
+  var whiley = 0;
+  while (lives > 0) {
+	whiley++;
+	if (whiley > 1){break;}
+	console.log("while")
+    // go orange
+	rand_time = 1000
+	waitToComplete(rand_time, function(){
+		changeSquareColor("demo1", "orange");
+	})
+	
+  }
+}
+</script>
+</head>
+<body>
+<h1>P1XEL</h1>
+
+<h2>Rules</h2>
+<div class="color-box" style="background-color: darkgray"></div>: Game not started yet
+<div class="color-box" style="background-color: black"></div>: This isn't allowed
+<div class="color-box" style="background-color: green"></div>: Good move
+<div class="color-box" style="background-color: red"></div>: Bad move / lose a life
+<div class="color-box" style="background-color: orange"></div>: Danger
+<div class="color-box" style="background-color: blue"></div>: No danger but opportunity
+<div class="color-box" style="background-color: lightgray"></div>: Neutral
+
+<h2>Demo 1</h2>
+<p>
+Click the box when it flashes orange.
+
+You have 3 lives.
+</p>
+
+
+<div id = "demo1" class="color-box" style="width: 100px; height: 100px" onclick="demo1()"></div>
+
+</body>
+</html> 
