@@ -14,44 +14,7 @@
 </style>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
 
-<script>
-
-// Need to focus on the engine. All demos will be one pixel, with controls,
-// with delays, with colors. Solve these problems first. (Colors solved already.)
-
-function changeSquareColor(demo, color) {
-  console.log("changing " + demo + " to color " + color)
-  document.getElementById(demo).style.backgroundColor = color;
-}
-
-async function waitToComplete(time_ms, callback) {
-
-  let promise = new Promise((resolve, reject) => {
-    setTimeout(() => resolve("done!"), time_ms)
-  });
-
-  let result = await promise; // wait until the promise resolves (*)
-
-  callback(); // "done!"
-}
-
-function demo1() {
-  changeSquareColor("demo1", "lightgray");
-  var lives = 3;
-  var whiley = 0;
-  while (lives > 0) {
-	whiley++;
-	if (whiley > 1){break;}
-	console.log("while")
-    // go orange
-	rand_time = 1000
-	waitToComplete(rand_time, function(){
-		changeSquareColor("demo1", "orange");
-	})
-	
-  }
-}
-</script>
+<script src="demo1.js"></script>
 </head>
 <body>
 <h1>P1XEL</h1>
@@ -73,7 +36,7 @@ You have 3 lives.
 </p>
 
 
-<div id = "demo1" class="color-box" style="width: 100px; height: 100px" onclick="demo1()"></div>
+<div id = "demo1" class="color-box" style="width: 300px; height: 300px" onclick="clickDemo1()"></div>
 
 <br>
 <h2>Phaser demo</h2>
