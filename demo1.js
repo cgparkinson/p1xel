@@ -21,16 +21,23 @@ function waitToGoRed(demo1) {
     // go orange
     console.log("go red")
     rand_time = 1000
-    waitToComplete(rand_time, function () {
+    demo1.nextAction = waitToComplete(rand_time, function () {
         demo1.color = "red";
         demo1.nextClick = null;
     })
+}
+
+function loseLife(demo1) {
+    demo1.lives--;
+    demo1.nextAction = null;
+
 }
 
 function waitToGoOrange(demo1) {
     // go orange
     console.log("go orange")
     rand_time = 1000
+    demo1.nextClick = loseLife;
     waitToComplete(rand_time, function () {
         demo1.color = "orange";
         demo1.nextClick = waitToGoRed;
@@ -44,15 +51,17 @@ class Demo1 {
         this.busy = false;
         this.color = "lightgray";
         this.activecolor = "lightgray";
-        this.nextClick = waitToGoOrange;//function () { alert("how did u do that"); };
+        this.nextClick = waitToGoOrange;
+        this.nextAction = null;
     }
 }
 
+var demo1;
 function getDemo1() {
     if (!demo1) {
         console.log("initialise")
         // initialise
-        var demo1 = new Demo1();
+        demo1 = new Demo1();
         function refresh() {
             if (demo1.color != demo1.activecolor) {
                 changeSquareColor("demo1", demo1.color);
