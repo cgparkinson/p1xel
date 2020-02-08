@@ -6,35 +6,15 @@ function changeSquareColor(demo, color) {
     document.getElementById(demo).style.backgroundColor = color;
 }
 
-async function waitToComplete(time_ms, callback) {
-
-    let promise = new Promise((resolve, reject) => {
-        setTimeout(() => resolve("done!"), time_ms)
-    });
-
-    let result = await promise; // wait until the promise resolves (*)
-
-    callback(); // "done!"
-}
-
-function waitToGoRed(demo1) {
-    // go orange
-    console.log("go red")
-    rand_time = 1000
-    demo1.nextAction = waitToComplete(rand_time, function () {
-        demo1.color = "red";
-        demo1.nextClick = null;
-    })
-}
 
 function loseLife(demo1) {
     demo1.lives--;
-    demo1.nextAction = null;
 }
 
-function goGreen(demo1) {
+function success(demo1) {
     demo1.color = "green";
-    demo1.nextAction = null;
+    demo1.timeline.clear();
+    waitToGoOrange(demo1);
 }
 
 function waitToGoOrange(demo1) {
@@ -42,11 +22,48 @@ function waitToGoOrange(demo1) {
     console.log("go orange")
     rand_time = 1000
     demo1.nextClick = loseLife;
-    waitToComplete(rand_time, function () {
-        demo1.color = "orange";
-        demo1.nextClick = goGreen;
-        demo1.nextAction = waitToGoRed(demo1);
-    })
+    
+    demo1.timeline.add(new TimelineEvent(
+        name="test123",
+        fn=function () {
+            demo1.color = "orange";
+            demo1.nextClick = success;
+        },
+        delay=rand_time
+    ))
+}
+
+class TimelineEvent {
+    constructor(name, fn, delay) {
+        this.name = name;
+        this.fn = fn;
+        this.delay = delay;
+    }
+}
+
+class Timeline {
+    constructor() {
+        this.timeline = [];
+    }
+    clear() {
+        this.timeline = [];
+    }
+    add(elt) {
+        this.timeline.push(elt);
+    }
+    refresh(demo1, delta) {
+        this.timeline = this.timeline.filter((elt) => {
+            console.log(elt);
+            console.log("processing " + elt.name)
+            elt.delay -= delta;
+            if (elt.delay <= 0) {
+                // remove and execute
+                console.log("<0")
+                elt.fn(demo1)
+            }
+            return (elt.delay > 0)
+        });
+    }
 }
 
 class Demo1 {
@@ -57,7 +74,7 @@ class Demo1 {
         this.color = "lightgray";
         this.activecolor = "lightgray";
         this.nextClick = waitToGoOrange;
-        this.nextAction = null;
+        this.timeline = new Timeline();
     }
 }
 
@@ -67,13 +84,16 @@ function getDemo1() {
         console.log("initialise")
         // initialise
         demo1 = new Demo1();
+        const fps = 60;
+        const delta = 1000/fps;
         function refresh() {
             if (demo1.color != demo1.activecolor) {
                 changeSquareColor("demo1", demo1.color);
                 demo1.activecolor = demo1.color;
             }
+            demo1.timeline.refresh(demo1, delta);
         }
-        var t = setInterval(refresh, 50);
+        var t = setInterval(refresh, delta);
         return demo1;
     } else {
         console.log("already have demo1");
@@ -83,7 +103,6 @@ function getDemo1() {
 
 function clickDemo1() {
     console.log("click received")
-    
     demo1 = getDemo1();
     demo1.nextClick(demo1);
 }
