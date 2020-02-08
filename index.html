@@ -1,95 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style type="text/css">
-.color-box {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    background-color: darkgray;
-    position: relative;
-    left: 5px;
-    top: 5px;
-}
-</style>
+    <title>P1XEL</title>
+    <style type="text/css">
+    .color-box {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        background-color: darkgray;
+        position: relative;
+        left: 5px;
+        top: 5px;
+    }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
-
-<script src="demo1.js"></script>
+    <script src="demo1.js"></script>
 </head>
 <body>
-<h1>P1XEL</h1>
+    <h1>P1XEL</h1>
 
-<h2>Rules</h2>
-<br><div class="color-box" style="background-color: darkgray"></div>: Game not started yet
-<br><div class="color-box" style="background-color: black"></div>: This isn't allowed
-<br><div class="color-box" style="background-color: green"></div>: Good move
-<br><div class="color-box" style="background-color: red"></div>: Bad move / lose a life
-<br><div class="color-box" style="background-color: orange"></div>: Danger
-<br><div class="color-box" style="background-color: blue"></div>: No danger but opportunity
-<br><div class="color-box" style="background-color: lightgray"></div>: Neutral
+    <h2>Rules</h2>
+    <br><div class="color-box" style="background-color: darkgray"></div>: Game not started yet
+    <br><div class="color-box" style="background-color: black"></div>: This isn't allowed
+    <br><div class="color-box" style="background-color: green"></div>: Good move
+    <br><div class="color-box" style="background-color: red"></div>: Bad move / lose a life
+    <br><div class="color-box" style="background-color: orange"></div>: Danger
+    <br><div class="color-box" style="background-color: blue"></div>: No danger but opportunity
+    <br><div class="color-box" style="background-color: lightgray"></div>: Neutral
 
-<h2>Demo 1</h2>
-<p>
-Click the box when it flashes orange.
+    <h2>Demo 1</h2>
+    <p>
+    Click the box when it flashes orange.
 
-You have 3 lives.
-</p>
+    You have 3 lives.
+    </p>
 
 
-<div id = "demo1" class="color-box" style="width: 300px; height: 300px" onclick="clickDemo1()"></div>
-
-<br>
-<h2>Phaser demo</h2>
-<br>
-    <script>
-    var config = {
-        type: Phaser.AUTO,
-        width: 200,
-        height: 200,
-        physics: {
-            default: 'arcade',
-            arcade: {
-                gravity: { y: 200 }
-            }
-        },
-        scene: {
-            preload: preload,
-            create: create
-        }
-    };
-
-    var game = new Phaser.Game(config);
-
-    function preload ()
-    {
-        this.load.setBaseURL('http://labs.phaser.io');
-
-        this.load.image('sky', 'assets/skies/space3.png');
-        this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-        this.load.image('red', 'assets/particles/red.png');
-    }
-
-    function create ()
-    {
-        this.add.image(400, 300, 'red');
-
-        var particles = this.add.particles('red');
-
-        var emitter = particles.createEmitter({
-            speed: 100,
-            scale: { start: 1, end: 0 },
-            blendMode: 'ADD'
-        });
-
-        var logo = this.physics.add.image(400, 100, 'red');
-
-        logo.setVelocity(100, 200);
-        logo.setBounce(1, 1);
-        logo.setCollideWorldBounds(true);
-
-        emitter.startFollow(logo);
-    }
-    </script>
+    <div id = "demo1" class="color-box" style="width: 300px; height: 300px" onclick="clickDemo1()"></div>
 
 </body>
 </html> 

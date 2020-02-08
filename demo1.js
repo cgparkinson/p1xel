@@ -30,7 +30,11 @@ function waitToGoRed(demo1) {
 function loseLife(demo1) {
     demo1.lives--;
     demo1.nextAction = null;
+}
 
+function goGreen(demo1) {
+    demo1.color = "green";
+    demo1.nextAction = null;
 }
 
 function waitToGoOrange(demo1) {
@@ -40,7 +44,8 @@ function waitToGoOrange(demo1) {
     demo1.nextClick = loseLife;
     waitToComplete(rand_time, function () {
         demo1.color = "orange";
-        demo1.nextClick = waitToGoRed;
+        demo1.nextClick = goGreen;
+        demo1.nextAction = waitToGoRed(demo1);
     })
 }
 
