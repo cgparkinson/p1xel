@@ -9,15 +9,13 @@ function changeSquareColor(demo, color) {
 
 
 function loseLife(demo1) {
+    demo1.color="red";
+    demo1.timeline.clear();
     if (demo1.lives > 0) {
         demo1.lives--;
-        demo1.color="red";
-        demo1.timeline.clear();
         waitToGoOrange(demo1);
     }
     else {
-        demo1.color="red";
-        demo1.timeline.clear();
         demo1.timeline.add(new TimelineEvent(
             name="death",
             fn=function(){
@@ -38,9 +36,21 @@ function success(demo1) {
 
 function waitToGoOrange(demo1) {
     // go orange
-    console.log("go orange")
-    rand_time = 300 + Math.random();
-    demo1.nextClick = loseLife;
+    console.log("preparing next flash")
+    rand_time = 300 + 1000*Math.random();
+    demo1.nextClick = function(demo1) {console.log("bad click");};
+
+    time_until_beige = 150;
+    time_until_orange = time_until_beige + rand_time
+
+    demo1.timeline.add(new TimelineEvent(
+        name="go_beige",
+        fn=function(demo1) {
+            demo1.nextClick = function(demo1) {console.log("very bad click");loseLife(demo1);};
+            demo1.color = "beige";
+        },
+        delay=time_until_beige
+    ));
     
     demo1.timeline.add(new TimelineEvent(
         name="go_orange",
@@ -49,11 +59,11 @@ function waitToGoOrange(demo1) {
             demo1.nextClick = success;
             demo1.timeline.add(new TimelineEvent(
                 name="faliure",
-                fn=loseLife,
+                fn=function(demo1) {console.log("missed click");loseLife(demo1);},
                 delay=100+2000/(demo1.successes+1)
             ))
         },
-        delay=rand_time
+        delay=time_until_orange
     ))
 }
 
@@ -121,7 +131,6 @@ function getDemo1() {
             demo1.timeline.refresh(demo1, delta);
         }
         var t = setInterval(refresh, delta);
-        demo1.refreshInterval = t;
         return demo1;
     } else {
         return demo1;
